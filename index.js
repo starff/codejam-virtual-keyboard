@@ -63,4 +63,16 @@ const keyboard = [
     {keyCode: 'ArrowDown', enKey: 'ArrowDown', ruKey: 'ArrowDown', enKeyShift: '', ruKeyShift: ''},
     {keyCode: 'ArrowRight', enKey: 'ArrowRight', ruKey: 'ArrowRight', enKeyShift: '', ruKeyShift: ''},
     {keyCode: 'Delete', enKey: 'Delete', ruKey: 'Delete', enKeyShift: '', ruKeyShift: ''}
-]
+];
+
+
+
+function init() {
+    document.body.innerHTML = '<textarea class="field"></textarea><div class="keyboard"></div>';
+    let keyBlock = '';
+    for (let i = 0; i < keyboard.length; i++) {
+        keyBlock += '<div class="key">'+keyboard[i]['enKey']+'</div>';
+    }
+    document.querySelector('.keyboard').innerHTML = keyBlock;
+}
+window.onload = init();
