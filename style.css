@@ -22,6 +22,9 @@
     border: 1px solid black;
     cursor: pointer;
 }
+.active {
+    background: blue;
+}
 .key:hover {
     background: blueviolet;
 }

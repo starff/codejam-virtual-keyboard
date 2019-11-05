@@ -12,8 +12,8 @@ const keyboard = {
     Digit0: {enKey: '0', ruKey: '0', enKeyShift: ')', ruKeyShift: ')'},
     Minus: {enKey: '-', ruKey: '-', enKeyShift: '_', ruKeyShift: '_'},
     Equal: {enKey: '=', ruKey: '=', enKeyShift: '+', ruKeyShift: '+'},
-    Backspace: {enKey: '&lArr;', ruKey: '&lArr;', enKeyShift: '&lArr;', ruKeyShift: '&lArr;'},
-    Tab: {enKey: 'Tab', ruKey: 'Tab', enKeyShift: '', ruKeyShift: ''},
+    Backspace: {value: '&lArr;'},
+    Tab: {value: 'Tab'},
     KeyQ: {enKey: 'q', ruKey: 'й', enKeyShift: 'Q', ruKeyShift: 'Й'},
     KeyW: {enKey: 'w', ruKey: 'ц', enKeyShift: 'W', ruKeyShift: 'Ц'},
     KeyE: {enKey: 'e', ruKey: 'у', enKeyShift: 'E', ruKeyShift: 'У'},
@@ -27,8 +27,8 @@ const keyboard = {
     BracketLeft: {enKey: '[', ruKey: 'х', enKeyShift: '{', ruKeyShift: 'Х'},
     BracketRight: {enKey: ']', ruKey: 'ъ', enKeyShift: '}', ruKeyShift: 'Ъ'},
     Backslash: {enKey: '', ruKey: '', enKeyShift: '|', ruKeyShift: '/'},
-    Delete: {enKey: 'del', ruKey: 'del', enKeyShift: 'del', ruKeyShift: 'del'},
-    CapsLock: {enKey: 'CapsLock', ruKey: 'CapsLock', enKeyShift: 'CapsLock', ruKeyShift: 'CapsLock'},
+    Delete: {value: 'del'},
+    CapsLock: {value: 'CapsLock'},
     KeyA: {enKey: 'a', ruKey: 'ф', enKeyShift: 'A', ruKeyShift: 'Ф'},
     KeyS: {enKey: 's', ruKey: 'ы', enKeyShift: 'S', ruKeyShift: 'Ы'},
     KeyD: {enKey: 'd', ruKey: 'в', enKeyShift: 'D', ruKeyShift: 'В'},
@@ -40,8 +40,8 @@ const keyboard = {
     KeyL: {enKey: 'l', ruKey: 'д', enKeyShift: 'L', ruKeyShift: 'Д'},
     Semicolon: {enKey: ';', ruKey: 'ж', enKeyShift: ':', ruKeyShift: 'Ж'},
     Quote: {enKey: "'", ruKey: 'э', enKeyShift: '"', ruKeyShift: 'Э'},
-    Enter: {enKey: '&crarr;', ruKey: '&crarr;', enKeyShift: '&crarr;', ruKeyShift: '&crarr;'},
-    ShiftLeft: {enKey: 'Shift', ruKey: 'Shift', enKeyShift: '', ruKeyShift: ''},
+    Enter: {value: '&crarr;'},
+    ShiftLeft: {value: 'Shift'},
     KeyZ: {enKey: 'z', ruKey: 'я', enKeyShift: 'Z', ruKeyShift: 'Я'},
     KeyX: {enKey: 'x', ruKey: 'ч', enKeyShift: 'X', ruKeyShift: 'Ч'},
     KeyC: {enKey: 'c', ruKey: 'с', enKeyShift: 'C', ruKeyShift: 'С'},
@@ -52,84 +52,142 @@ const keyboard = {
     Comma: {enKey: ',', ruKey: 'б', enKeyShift: '<', ruKeyShift: 'Б'},
     Period: {enKey: '.', ruKey: 'ю', enKeyShift: '>', ruKeyShift: 'Ю'},
     Slash: {enKey: '/', ruKey: '.', enKeyShift: '?', ruKeyShift: ','},
-    ArrowUp: {enKey: '&uarr;', ruKey: '&uarr;', enKeyShift: '&uarr;', ruKeyShift: '&uarr;'},
-    ShiftRight: {enKey: 'Shift', ruKey: 'Shift', enKeyShift: 'Shift', ruKeyShift: 'Shift'},
-    ControlLeft: {enKey: 'Ctrl', ruKey: 'Ctrl', enKeyShift: 'Ctrl', ruKeyShift: 'Ctrl'},
-    MetaLeft: {enKey: 'win', ruKey: 'win', enKeyShift: '', ruKeyShift: ''},
-    AltLeft: {enKey: 'Alt', ruKey: 'Alt', enKeyShift: 'Alt', ruKeyShift: 'Alt'},
-    Space: {enKey: 'Space', ruKey: 'Space', enKeyShift: 'Space', ruKeyShift: 'Space'},
-    AltRight: {enKey: 'Alt', ruKey: 'Alt', enKeyShift: 'Alt', ruKeyShift: 'Alt'},
-    ArrowLeft: {enKey: '&larr;', ruKey: '&larr;', enKeyShift: '&larr;', ruKeyShift: '&larr;'},
-    ArrowDown: {enKey: '&darr;', ruKey: '&darr;', enKeyShift: '&darr;', ruKeyShift: '&darr;'},
-    ArrowRight: {enKey: '&rarr;', ruKey: '&rarr;', enKeyShift: '&rarr;', ruKeyShift: '&rarr;'},
-    ControlRight: {enKey: 'Ctrl', ruKey: 'Ctrl', enKeyShift: 'Ctrl', ruKeyShift: 'Ctrl'}
+    ArrowUp: {value: '&uarr;'},
+    ShiftRight: {value: 'Shift'},
+    ControlLeft: {value: 'Ctrl'},
+    MetaLeft: {value: 'Win'},
+    AltLeft: {value: 'Alt'},
+    Space: {value: 'Space'},
+    AltRight: {value: 'Alt'},
+    ArrowLeft: {value: '&larr;'},
+    ArrowDown: {value: '&darr;'},
+    ArrowRight: {value: '&rarr;'},
+    ControlRight: {value: 'Ctrl'}
+};
+
+// save language 
+
+let lang = localStorage.getItem('language');
+localStorage.setItem('language', lang);
+
+// shift and caps lock
+
+let shift = 0;
+document.addEventListener('keydown', function(event) {
+    if (event.shiftKey) {
+        shift = 1;
+        console.log(shift);
+        initKeyboard();
+    };
+});
+document.addEventListener('keyup', function(event) {
+    if (event.key == 'Shift') {
+        shift = 0;
+        console.log(shift);
+        initKeyboard();
+    };
+});
+document.addEventListener('keydown', function(event) {
+    if (event.code == 'CapsLock' && shift == 0) {
+        shift = 1;
+        console.log(shift);
+        initKeyboard();
+    } else if (event.code == 'CapsLock' && shift == 1) {
+        shift = 0;
+        console.log(shift);
+        initKeyboard();
+    };
+});
+
+// init text field
+
+function initText() {
+document.body.innerHTML = '<textarea class="field"></textarea><div class="keyboard"></div>';
 };
 
 
+// init keyboard
 
-function init() {
-    document.body.innerHTML = '<textarea class="field"></textarea><div class="keyboard"></div>';
+function initKeyboard() {
     let keyBlock = '';
     for (let keyCode in keyboard) {
-        
         if (keyCode == 'Backspace' || keyCode == 'CapsLock' || keyCode == 'Enter' || keyCode == 'ShiftLeft' || keyCode == 'ShiftRight') {
-            keyBlock += '<div class="key dblKey" id="'+keyCode+'">'+keyboard[keyCode]['enKey']+'</div>';
+            keyBlock += '<div class="key funcKey dblKey" id="'+keyCode+'">'+keyboard[keyCode]['value']+'</div>';
         } else if (keyCode == 'Space') {
-            keyBlock += '<div class="key space" id="'+keyCode+'">'+keyboard[keyCode]['enKey']+'</div>';
+            keyBlock += '<div class="key funcKey space" id="'+keyCode+'">'+keyboard[keyCode]['value']+'</div>';
+        } else if (keyCode == 'Tab' || keyCode == 'Delete' || keyCode == 'ArrowUp' || keyCode == 'ControlLeft' || keyCode == 'MetaLeft' || keyCode == 'AltLeft' || keyCode == 'AltRight' || keyCode == 'ArrowLeft' || keyCode == 'ArrowDown' || keyCode == 'ArrowRight' || keyCode == 'ControlRight') {
+            keyBlock += '<div class="key funcKey" id="'+keyCode+'">'+keyboard[keyCode]['value']+'</div>';
         } else {
-        keyBlock += '<div class="key" id="'+keyCode+'">'+keyboard[keyCode]['enKey']+'</div>';
+            if (lang == 'en' && shift == 0) {
+                keyBlock += '<div class="key" id="'+keyCode+'">'+keyboard[keyCode]['enKey']+'</div>';
+            } else if (lang == 'en' && shift == 1) {
+                keyBlock += '<div class="key" id="'+keyCode+'">'+keyboard[keyCode]['enKeyShift']+'</div>';
+            } else if (lang == 'ru' && shift == 0) {
+                keyBlock += '<div class="key" id="'+keyCode+'">'+keyboard[keyCode]['ruKey']+'</div>';
+            } else if (lang == 'ru' && shift == 1) {
+                keyBlock += '<div class="key" id="'+keyCode+'">'+keyboard[keyCode]['ruKeyShift']+'</div>';
+            };
         };
     };
     document.querySelector('.keyboard').innerHTML = keyBlock;
 };
-window.onload = init();
-
-let lang;
-let shift = 0;
-
-function getLang() {
- if (navigator.languages != undefined) 
- lang = navigator.languages[0]; 
- else 
- lang = navigator.language;
-};
-window.onload = getLang();
-console.log(lang);
-
-document.querySelector('#Backquote').addEventListener('mousedown', function() {
-    text += keyboard.Backquote['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
+window.onload = initText();
+window.onload = initKeyboard();
 
 
-// function active() {
-//     document.querySelector('.key:hover').style.background = 'blue';
-// };
 
+
+
+
+// add text in field
 
 let text = '';
 document.addEventListener('keydown', function(event) {
-    text += keyboard[event.code]['enKey'];
+    if (lang == 'en' && keyboard[event.code]['enKey'] != undefined && shift == 0) {
+        text += keyboard[event.code]['enKey'];
+    } else if (lang == 'ru' && keyboard[event.code]['ruKey'] != undefined && shift == 0) {
+        text += keyboard[event.code]['ruKey'];
+    } else if (lang == 'en' && keyboard[event.code]['enKey'] != undefined && shift == 1) {
+        text += keyboard[event.code]['enKeyShift'];
+    } else if (lang == 'ru' && keyboard[event.code]['ruKey'] != undefined && shift == 1) {
+        text += keyboard[event.code]['ruKeyShift'];
+    };
     document.querySelector('.field').innerHTML = text;
-    document.getElementById(event.code).style.background = 'blue';
+    document.getElementById(event.code).classList.add("active");
 });
-document.querySelector('#Digit1').addEventListener('mousedown', function() {
-    text += keyboard.Digit1['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-
-
 document.addEventListener('keyup', function(event) {
-    document.getElementById(event.code).style.background = 'aqua';
+    document.getElementById(event.code).classList.remove("active");
 });
 
+//change language
 
+document.addEventListener('keydown', function(event) {
+    if (event.key == 'Alt' && event.ctrlKey) {
+            if (lang == 'en') {
+                lang = 'ru';
+                console.log(lang);
+            } else {
+                lang = 'en';
+                console.log(lang);
+            };
+            initKeyboard();
+            localStorage.setItem('language', lang);
+    };
+});
+
+console.log(lang);
 
 
 
 //click
 document.querySelector('#Backquote').addEventListener('mousedown', function() {
-    text += keyboard.Backquote['enKey'];
+    if (lang == 'en') {
+        text += keyboard.Backquote['enKey'];
+        console.log(1);
+    } else {
+        text += keyboard.Backquote['ruKey'];
+        console.log(2);
+    };
     document.querySelector('.field').innerHTML = text;
 });
 document.querySelector('#Digit1').addEventListener('mousedown', function() {
