@@ -26,7 +26,7 @@ const keyboard = {
     KeyP: {enKey: 'p', ruKey: 'з', enKeyShift: 'P', ruKeyShift: 'З'},
     BracketLeft: {enKey: '[', ruKey: 'х', enKeyShift: '{', ruKeyShift: 'Х'},
     BracketRight: {enKey: ']', ruKey: 'ъ', enKeyShift: '}', ruKeyShift: 'Ъ'},
-    Backslash: {enKey: '', ruKey: '', enKeyShift: '|', ruKeyShift: '/'},
+    Backslash: {enKey: '\\', ruKey: '\\', enKeyShift: '|', ruKeyShift: '/'},
     Delete: {value: 'del'},
     CapsLock: {value: 'CapsLock'},
     KeyA: {enKey: 'a', ruKey: 'ф', enKeyShift: 'A', ruKeyShift: 'Ф'},
@@ -76,25 +76,21 @@ let shift = 0;
 document.addEventListener('keydown', function(event) {
     if (event.shiftKey) {
         shift = 1;
-        console.log(shift);
         initKeyboard();
     };
 });
 document.addEventListener('keyup', function(event) {
     if (event.key == 'Shift') {
         shift = 0;
-        console.log(shift);
         initKeyboard();
     };
 });
 document.addEventListener('keydown', function(event) {
     if (event.code == 'CapsLock' && shift == 0) {
         shift = 1;
-        console.log(shift);
         initKeyboard();
     } else if (event.code == 'CapsLock' && shift == 1) {
         shift = 0;
-        console.log(shift);
         initKeyboard();
     };
 });
@@ -115,8 +111,10 @@ function initKeyboard() {
             keyBlock += '<div class="key funcKey dblKey" id="'+keyCode+'">'+keyboard[keyCode]['value']+'</div>';
         } else if (keyCode == 'Space') {
             keyBlock += '<div class="key funcKey space" id="'+keyCode+'">'+keyboard[keyCode]['value']+'</div>';
-        } else if (keyCode == 'Tab' || keyCode == 'Delete' || keyCode == 'ArrowUp' || keyCode == 'ControlLeft' || keyCode == 'MetaLeft' || keyCode == 'AltLeft' || keyCode == 'AltRight' || keyCode == 'ArrowLeft' || keyCode == 'ArrowDown' || keyCode == 'ArrowRight' || keyCode == 'ControlRight') {
+        } else if (keyCode == 'Tab' || keyCode == 'Delete' || keyCode == 'ControlLeft' || keyCode == 'MetaLeft' || keyCode == 'AltLeft' || keyCode == 'AltRight' || keyCode == 'ControlRight') {
             keyBlock += '<div class="key funcKey" id="'+keyCode+'">'+keyboard[keyCode]['value']+'</div>';
+        } else if (keyCode == 'ArrowUp' || keyCode == 'ArrowLeft' || keyCode == 'ArrowDown' || keyCode == 'ArrowRight') {
+            keyBlock += '<div class="key" id="'+keyCode+'">'+keyboard[keyCode]['value']+'</div>';
         } else {
             if (lang == 'en' && shift == 0) {
                 keyBlock += '<div class="key" id="'+keyCode+'">'+keyboard[keyCode]['enKey']+'</div>';
@@ -131,13 +129,9 @@ function initKeyboard() {
     };
     document.querySelector('.keyboard').innerHTML = keyBlock;
 };
+
 window.onload = initText();
 window.onload = initKeyboard();
-
-
-
-
-
 
 // add text in field
 
@@ -159,6 +153,49 @@ document.addEventListener('keyup', function(event) {
     document.getElementById(event.code).classList.remove("active");
 });
 
+
+// backspace 
+
+document.addEventListener('keydown', function(event) {
+    
+    if (event.code == 'Backspace') {
+        let back = document.querySelector('.field').innerHTML;
+        text = back.split('').slice(0, -1).join('');
+        document.querySelector('.field').innerHTML = text;
+    };
+});
+
+//space 
+
+document.addEventListener('keydown', function(event) {
+    
+    if (event.code == 'Space') {
+        text += ' ';
+        document.querySelector('.field').innerHTML = text;
+    };
+});
+
+//enter 
+
+document.addEventListener('keydown', function(event) {
+    
+    if (event.code == 'Enter') {
+        text += '\n';
+        document.querySelector('.field').innerHTML = text;
+    };
+});
+
+//tab
+
+document.getElementById("Tab").addEventListener("click", function(event){
+    event.preventDefault();
+  });
+  document.addEventListener('keydown', function(event) {
+      if (event.code == 'Tab') {
+        event.preventDefault();
+      };
+});
+
 //change language
 
 document.addEventListener('keydown', function(event) {
@@ -175,202 +212,22 @@ document.addEventListener('keydown', function(event) {
     };
 });
 
-console.log(lang);
 
 
 
 //click
-document.querySelector('#Backquote').addEventListener('mousedown', function() {
-    if (lang == 'en') {
-        text += keyboard.Backquote['enKey'];
-        console.log(1);
-    } else {
-        text += keyboard.Backquote['ruKey'];
-        console.log(2);
-    };
-    document.querySelector('.field').innerHTML = text;
+
+let keyTable =document.querySelector('.keyboard');
+keyTable.addEventListener('mousedown', function() { 
+    let target = event.target;
+    if (target.className == 'key') {
+       text += target.innerText;
+       console.log(target.innerText);
+       document.querySelector('.field').innerHTML = text;
+    } else if (target.classList.contains('space')) {
+        text += ' ';
+        document.querySelector('.field').innerHTML = text;
+     }
 });
-document.querySelector('#Digit1').addEventListener('mousedown', function() {
-    text += keyboard.Digit1['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit2').addEventListener('mousedown', function() {
-    text += keyboard.Digit2['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit3').addEventListener('mousedown', function() {
-    text += keyboard.Digit3['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit4').addEventListener('mousedown', function() {
-    text += keyboard.Digit4['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit5').addEventListener('mousedown', function() {
-    text += keyboard.Digit5['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit6').addEventListener('mousedown', function() {
-    text += keyboard.Digit6['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit7').addEventListener('mousedown', function() {
-    text += keyboard.Digit7['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit8').addEventListener('mousedown', function() {
-    text += keyboard.Digit8['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit9').addEventListener('mousedown', function() {
-    text += keyboard.Digit9['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Digit0').addEventListener('mousedown', function() {
-    text += keyboard.Digit0['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Minus').addEventListener('mousedown', function() {
-    text += keyboard.Minus['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Equal').addEventListener('mousedown', function() {
-    text += keyboard.Equal['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyQ').addEventListener('mousedown', function() {
-    text += keyboard.KeyQ['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyW').addEventListener('mousedown', function() {
-    text += keyboard.KeyW['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyE').addEventListener('mousedown', function() {
-    text += keyboard.KeyE['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyR').addEventListener('mousedown', function() {
-    text += keyboard.KeyR['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyT').addEventListener('mousedown', function() {
-    text += keyboard.KeyT['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyY').addEventListener('mousedown', function() {
-    text += keyboard.KeyY['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyU').addEventListener('mousedown', function() {
-    text += keyboard.KeyU['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyI').addEventListener('mousedown', function() {
-    text += keyboard.KeyI['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyO').addEventListener('mousedown', function() {
-    text += keyboard.KeyO['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyP').addEventListener('mousedown', function() {
-    text += keyboard.KeyP['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#BracketLeft').addEventListener('mousedown', function() {
-    text += keyboard.BracketLeft['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#BracketRight').addEventListener('mousedown', function() {
-    text += keyboard.BracketRight['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Backslash').addEventListener('mousedown', function() {
-    text += keyboard.Backslash['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyA').addEventListener('mousedown', function() {
-    text += keyboard.KeyA['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyS').addEventListener('mousedown', function() {
-    text += keyboard.KeyS['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyD').addEventListener('mousedown', function() {
-    text += keyboard.KeyD['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyF').addEventListener('mousedown', function() {
-    text += keyboard.KeyF['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyG').addEventListener('mousedown', function() {
-    text += keyboard.KeyG['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyH').addEventListener('mousedown', function() {
-    text += keyboard.KeyH['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyJ').addEventListener('mousedown', function() {
-    text += keyboard.KeyJ['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyK').addEventListener('mousedown', function() {
-    text += keyboard.KeyK['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyL').addEventListener('mousedown', function() {
-    text += keyboard.KeyL['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Semicolon').addEventListener('mousedown', function() {
-    text += keyboard.Semicolon['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Quote').addEventListener('mousedown', function() {
-    text += keyboard.Quote['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyZ').addEventListener('mousedown', function() {
-    text += keyboard.KeyZ['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyX').addEventListener('mousedown', function() {
-    text += keyboard.KeyX['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyC').addEventListener('mousedown', function() {
-    text += keyboard.KeyC['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyV').addEventListener('mousedown', function() {
-    text += keyboard.KeyV['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyB').addEventListener('mousedown', function() {
-    text += keyboard.KeyB['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyN').addEventListener('mousedown', function() {
-    text += keyboard.KeyN['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#KeyM').addEventListener('mousedown', function() {
-    text += keyboard.KeyM['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Comma').addEventListener('mousedown', function() {
-    text += keyboard.Comma['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Period').addEventListener('mousedown', function() {
-    text += keyboard.Period['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
-document.querySelector('#Slash').addEventListener('mousedown', function() {
-    text += keyboard.Slash['enKey'];
-    document.querySelector('.field').innerHTML = text;
-});
+
+
