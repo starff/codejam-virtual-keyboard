@@ -66,8 +66,12 @@ const keyboard = {
 };
 
 // save language 
-
-let lang = localStorage.getItem('language');
+let lang;
+if (localStorage.getItem('language') == null || localStorage.getItem('language') == undefined) {
+    lang = 'en';
+} else {
+    lang = localStorage.getItem('language');
+};
 localStorage.setItem('language', lang);
 
 // shift and caps lock
