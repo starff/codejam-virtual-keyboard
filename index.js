@@ -76,22 +76,22 @@ let shift = 0;
 document.addEventListener('keydown', function(event) {
     if (event.shiftKey) {
         shift = 1;
-        initKeyboard();
+        initKeyboard(lang, shift);
     };
 });
 document.addEventListener('keyup', function(event) {
     if (event.key == 'Shift') {
         shift = 0;
-        initKeyboard();
+        initKeyboard(lang, shift);
     };
 });
 document.addEventListener('keydown', function(event) {
     if (event.code == 'CapsLock' && shift == 0) {
         shift = 1;
-        initKeyboard();
+        initKeyboard(lang, shift);
     } else if (event.code == 'CapsLock' && shift == 1) {
         shift = 0;
-        initKeyboard();
+        initKeyboard(lang, shift);
     };
 });
 
@@ -104,7 +104,7 @@ document.body.innerHTML = '<textarea class="field"></textarea><div class="keyboa
 
 // init keyboard
 
-function initKeyboard() {
+function initKeyboard(lang, shift) {
     let keyBlock = '';
     for (let keyCode in keyboard) {
         if (keyCode == 'Backspace' || keyCode == 'CapsLock' || keyCode == 'Enter' || keyCode == 'ShiftLeft' || keyCode == 'ShiftRight') {
@@ -131,7 +131,7 @@ function initKeyboard() {
 };
 
 window.onload = initText();
-window.onload = initKeyboard();
+window.onload = initKeyboard(lang, shift);
 
 // add text in field
 
@@ -207,7 +207,7 @@ document.addEventListener('keydown', function(event) {
                 lang = 'en';
                 console.log(lang);
             };
-            initKeyboard();
+            initKeyboard(lang, shift);
             localStorage.setItem('language', lang);
     };
 });
